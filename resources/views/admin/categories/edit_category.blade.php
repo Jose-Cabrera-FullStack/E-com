@@ -22,6 +22,18 @@
                   </div>
                 </div>
                 <div class="control-group">
+                  <label class="control-label">Parent ID</label>
+                  <div class="controls">
+                    <select name="parent_id" style="width: 200px;">
+                      <option value="0">
+                        @foreach($levels as $val)
+                      <option value="{{$val->id}}" @if($val->id == $categoryDetails->parent_id) selected @endif>{{$val->name}}</option>
+                        @endforeach
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="control-group">
                     <label class="control-label">Description</label>
                     <div class="controls">
                     <textarea name="description" id="description">{{$categoryDetails->description}}</textarea>
