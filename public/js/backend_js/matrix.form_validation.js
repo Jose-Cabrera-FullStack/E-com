@@ -94,6 +94,9 @@ $(document).ready(function(){
 			},
 			price:{
 				required:true,
+			},
+			image:{
+				required:true,
 			}
 		},
 		errorClass: "help-inline",
