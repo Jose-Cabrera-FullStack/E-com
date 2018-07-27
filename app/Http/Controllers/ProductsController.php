@@ -137,8 +137,22 @@ class ProductsController extends Controller
         return view('admin.products.view_products')->with(compact('products'));
     }
 
+    public function deleteProduct($id=null){
+        Product::where(['id'=>$id])->delete();
+        return redirect()->back()->with('flash_message_success','Product has been Deleted Successfully');
+    }
+
     public function deleteProductImage($id=null){
         Product::where(['id'=>$id])->update(['image'=>'']);
         return redirect()->back()->with('flash_message_success','Product Image has been deleted successfully');
+    }
+
+    public function addAttributes(Request $request,$id=null){
+        $productDetails = Product::where(['id'=>$id])->first();
+        if($request->isMethod('post')){
+            $data=$request->all();
+            echo "<pre>";print_r($data);die;
+        }
+        return view('admin.products.add_attributes')->with(compact('productDetails'));
     }
 }
