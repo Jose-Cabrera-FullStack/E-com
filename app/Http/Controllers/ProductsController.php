@@ -8,6 +8,7 @@ use Image;
 use Auth;
 Use App\Category;
 use App\Product;
+use App\ProductsAttribute;
 
 class ProductsController extends Controller
 {
@@ -148,11 +149,30 @@ class ProductsController extends Controller
     }
 
     public function addAttributes(Request $request,$id=null){
-        $productDetails = Product::where(['id'=>$id])->first();
+        $productDetails = Product::with('attributes')->where(['id'=>$id])->first();
+        //$productDetails = json_decode(json_encode($productDetails));
+
         if($request->isMethod('post')){
             $data=$request->all();
-            echo "<pre>";print_r($data);die;
+            //echo "<pre>";print_r($data);die;
+            foreach($data['sku'] as $key => $val){
+                if(!empty($val)){
+                    $attribute = new ProductsAttribute;
+                    $attribute->product_id = $id;
+                    $attribute->sku = $val;
+                    $attribute->size = $data['size'][$key];
+                    $attribute->price = $data['price'][$key];
+                    $attribute->stock = $data['stock'][$key];
+                    $attribute->save();
+                }
+            }
+            return redirect('admin/add-attribute/'.$id)->with('flash_message_success','Product Attributes has been added successfully!');
         }
         return view('admin.products.add_attributes')->with(compact('productDetails'));
+    }
+
+    public function deleteAttribute($id = null){
+        ProductsAttribute::where(['id'=>$id])->delete();
+        return redirect()->back()->with('flash_message_success','Attribute has been deleted successfully!');
     }
 }
