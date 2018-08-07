@@ -154,7 +154,6 @@ $(document).ready(function(){
 			},
 			url:{
 				required:true,
-				number:true
 			}
 		},
 		errorClass: "help-inline",

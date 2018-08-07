@@ -14,12 +14,14 @@
 //Route::get('/', function () {
   //  return view('welcome');
 //});
-
+//Home Pages
 Route::get('/','IndexController@index');
 
 Route::match(['get','post'],'/admin','AdminController@login');
 
 Auth::routes();
+//Category/Listing Page
+Route::get('/products/{url}','ProductsController@products'); 
 
 Route::group(['middleware' => ['auth']], function(){
     Route::get('/admin/dashboard','AdminController@dashboard'); 

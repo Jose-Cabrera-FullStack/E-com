@@ -131,10 +131,11 @@ class ProductsController extends Controller
     public function viewProducts(){
         $products = Product::get();
         $products = json_decode(json_encode($products));
-        foreach($products as $key=>$val){
+        foreach($products as $key => $val){
             $category_name = Category::where(['id'=>$val->category_id])->first();
             $products[$key]->category_name = $category_name->name;
         }
+        //echo "<pre>";print_r($products);die;
         return view('admin.products.view_products')->with(compact('products'));
     }
 
@@ -166,7 +167,7 @@ class ProductsController extends Controller
                     $attribute->save();
                 }
             }
-            return redirect('admin/add-attribute/'.$id)->with('flash_message_success','Product Attributes has been added successfully!');
+            return redirect('admin/add-attributes/'.$id)->with('flash_message_success','Product Attributes has been added successfully!');
         }
         return view('admin.products.add_attributes')->with(compact('productDetails'));
     }
@@ -174,5 +175,14 @@ class ProductsController extends Controller
     public function deleteAttribute($id = null){
         ProductsAttribute::where(['id'=>$id])->delete();
         return redirect()->back()->with('flash_message_success','Attribute has been deleted successfully!');
+    }
+
+    public function products($url = null){
+
+        $categories = Category::with('categories')->where(['parent_id'=>0])->get();
+
+        $categoryDetails = Category::where(['url' => null])->first();
+        $productsAll = Product::where(['category_id' => $categoryDetails->id])->get();
+        return view('products.listing')->with(compact('categories', 'categoryDetails','productsAll'));
     }
 }
